@@ -6,8 +6,15 @@ import java.util.List;
 @Data
 public class Account {
 
-    private String accountId;
+    private List<CustomerDetails> customerDetails;
 
-    private List<AccountDetails> accountDetails;
+    private List<OfferDetails> offerDetails;
 
+    @Override
+    public String toString() {
+        return "Account{" +
+                "customerDetails=" + customerDetails +
+                ", offerDetails=" + offerDetails +
+                '}';
+    }
 }
