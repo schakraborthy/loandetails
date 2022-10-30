@@ -7,7 +7,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.BodyInserter;
+import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
@@ -30,16 +33,14 @@ public class UserController {
 
         LOGGER.info("Got the data {}", account);
 
-        ReqHelper helper = new ReqHelper();
-        helper.setDoctype("SUPER_DOC");
-        helper.setLoan_type("SUPER_LOAN_TYPE");
-        helper.setStatus("SUPER_STATUS");
-        helper.setType("SUPER_TYPE");
+        MultipartBodyBuilder builder = new MultipartBodyBuilder();
+        builder.part("key1", "<PASTE_STRING>");
+        builder.part("key1", "<PASTE_STRING>");
 
         String s = webClient.post()
                 .uri("http://localhost:8090/api/account")
-                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-                .body(Mono.just(helper), ReqHelper.class)
+                .contentType(MediaType.MULTIPART_FORM_DATA)
+                .body(BodyInserters.fromMultipartData(builder.build()))
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
