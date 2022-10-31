@@ -11,6 +11,8 @@ public class OfferDetails {
 
     private String vin;
 
+    private String vehicleDescription;
+
     private String year;
 
     private String make;

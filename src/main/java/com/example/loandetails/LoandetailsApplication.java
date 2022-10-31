@@ -1,5 +1,6 @@
 package com.example.loandetails;
 
+import com.example.loandetails.controllers.UserController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;

@@ -6,9 +6,9 @@ import java.util.List;
 @Data
 public class Account {
 
-    private List<CustomerDetails> customerDetails;
+    private CustomerDetails customerDetails;
 
-    private List<OfferDetails> offerDetails;
+    private OfferDetails offerDetails;
 
     @Override
     public String toString() {
