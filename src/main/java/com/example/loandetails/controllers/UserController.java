@@ -35,7 +35,7 @@ public class UserController {
         this.webClient = webClient;
     }
 
-    @PostMapping("/account")
+    @PostMapping("/lead")
     public Account createAccount(@RequestBody Account account) {
 
         String itemCode,itemName, name, description,brand,make,model,car, period, email, effective_date;
