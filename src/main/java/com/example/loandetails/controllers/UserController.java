@@ -29,7 +29,7 @@ public class UserController {
 
     public static final String itemString = "{ \"doctype\": \"Item\", \"enable_deferred_expense\": 0, \"country_of_origin\": \"United States\", \"is_sub_contracted_item\": 0, \"published_in_website\": 0, \"item_template\": \"\", \"create_variant\": 0, \"item_code\": \"%s\", \"item_name\": \"%s\", \"item_group\": \"Consumable\", \"valuation_rate\": null, \"standard_rate\": %s, \"description\": \"%s\", \"weight_per_unit\": 0, \"brand\": \"%s\", \"vin\": \"KMHLP4AG8NU344828\", \"year\": 2022, \"make\": \"HYUNDAI\", \"model\": \"ELANTRA\", \"style\": \"4dr Sdn Limited\", \"vehicle_description\": \"VIN: KMHLP4AG8NU344828 - 2022 HYUNDAI ELANTRA 4dr Sdn Limited\", \"disclosure_text\": \"Payments include license or documentary fees and sales tax. With Approved Credit. Not all applicants will qualify. Lease and loan quoting is a dynamic process so payments and terms are subject to change prior to contract execution by all parties. (constant value)\", \"state\": \"California\", \"country\": \"SANTA CLARA\", \"city\": \"SAN JOSE\", \"vehicle_group_id\": \"null\", \"cust_rebates\": 400, \"rebate_code\": \"null\", \"residual\": 15592.35, \"residualpct\": 57, \"orprogram\": \"Hyundai MY22 ELANTRA Special Lease - CE0/EA/MA2/MA3/SC2/SO/WE1/WE2/WE3/WE6\" }";
 
-    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Personal Loan\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"LMS Visheshatech\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"Mr\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"24\", \"gender\": \"Male\", \"source\": \"Advertisement\", \"email_id\": \"%s\", \"mobile_no\": \"+919876543210\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"%s\", \"effective_date\": \"%s\", \"net_income\": 200000, \"monthly_payment\": 20000, \"down_payment\": 10000, \"residual_value\": 90000 }";
+    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Personal Loan\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"LMS Visheshatech\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"Mr\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"24\", \"gender\": \"Male\", \"source\": \"Advertisement\", \"email_id\": \"%s\", \"mobile_no\": \"%s\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"%s\", \"effective_date\": \"%s\", \"net_income\": 200000, \"monthly_payment\": 20000, \"down_payment\": 10000, \"residual_value\": 90000 }";
 
     public UserController(WebClient webClient) {
         this.webClient = webClient;
@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/lead")
     public Account createAccount(@RequestBody Account account) {
 
-        String itemCode,itemName, name, description,brand,make,model,car, period, email, effective_date;
+        String itemCode,itemName, name, description,brand,make,model,car, period, email, effective_date, mobile;
         int  term;
         double standardRate;
 
@@ -63,10 +63,11 @@ public class UserController {
         email = account.getCustomerDetails().getEmail();
         make = account.getOfferDetails().getMake();
         model = account.getOfferDetails().getModel();
+        mobile = account.getCustomerDetails().getMobile();
         period = account.getOfferDetails().getPayments().get(0).getTerm();
         effective_date = account.getOfferDetails().getPayments().get(0).getEffectiveDate();
 
-        String completeLeadString = String.format(leadString, name, email, make, model, period, effective_date);
+        String completeLeadString = String.format(leadString, name, email, mobile, make, model, period, effective_date);
 
         LOGGER.info(completeLeadString);
 
