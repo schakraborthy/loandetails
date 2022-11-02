@@ -29,7 +29,7 @@ public class UserController {
 
     public static final String itemString = "{ \"doctype\": \"Item\", \"enable_deferred_expense\": 0, \"country_of_origin\": \"United States\", \"is_sub_contracted_item\": 0, \"published_in_website\": 0, \"item_template\": \"\", \"create_variant\": 0, \"item_code\": \"%s\", \"item_name\": \"%s\", \"item_group\": \"Consumable\", \"valuation_rate\": null, \"standard_rate\": %s, \"description\": \"%s\", \"weight_per_unit\": 0, \"brand\": \"%s\", \"vin\": \"%s\", \"year\": 2022, \"make\": \"%s\", \"model\": \"%s\", \"style\": \"4dr Sdn Limited\", \"vehicle_description\": \"%s\", \"disclosure_text\": \"%s\", \"state\": \"%s\", \"country\": \"SANTA CLARA\", \"city\": \"%s\", \"vehicle_group_id\": \"null\", \"cust_rebates\": 400, \"rebate_code\": \"null\", \"residual\": %s, \"residualpct\": 57, \"orprogram\": \"%s\" }";
 
-    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Financial Lease\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"Mastek\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"\", \"gender\": \"Male\", \"source\": \"Chatbot\", \"email_id\": \"%s\", \"mobile_no\": \"%s\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"%s\", \"effective_date\": \"%s\", \"net_income\": , \"monthly_payment\": %s, \"down_payment\": %s, \"residual_value\": %s , \"item\":%s}";
+    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Personal Loan\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"LMS Visheshatech\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"\", \"gender\": \"Male\", \"source\": \"Advertisement\", \"email_id\": \"%s\", \"mobile_no\": \"%s\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"10\", \"effective_date\": \"%s\", \"net_income\":200000 , \"monthly_payment\": 490.56, \"down_payment\": 9000, \"residual_value\": 1000 , \"item\":\"item-117\"}";
 
     public UserController(WebClient webClient) {
         this.webClient = webClient;
@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/lead")
     public Account createAccount(@RequestBody Account account) {
 
-        String itemCode,itemName, name, description,brand,make,model,car, vin, state, city, period, email, effective_date, mobile, residual, vehicleDescription, disclosureText, downPayment, orProgram;
+        String itemCode,itemName, name, description,brand,make,model,car, vin, state, city, period, email, effective_date, mobile, residual, vehicleDescription, disclosureText, downPayment, orProgram, monthlyPayment;
         int  term;
         double standardRate;
 
@@ -77,9 +77,11 @@ public class UserController {
         period = account.getOfferDetails().getPayments().get(0).getTerm();
         effective_date = account.getOfferDetails().getPayments().get(0).getEffectiveDate();
         downPayment = account.getOfferDetails().getPayments().get(0).getDownPayment();
+        monthlyPayment = account.getOfferDetails().getPayments().get(0).getMonthlyPayment();
 
-        String completeLeadString = String.format(leadString, name, email, mobile, make, model, period, effective_date,account.getOfferDetails().getPayments().get(0).getMonthlyPayment(),downPayment,residual,itemCode );
+        String completeLeadString = String.format(leadString, name, email,mobile, make, model, effective_date,itemCode );
 
+        //, mobile, make, model, period, effective_date,monthlyPayment, downPayment,residual,itemCode
         LOGGER.info(completeLeadString);
 
         MultipartBodyBuilder builderItem = new MultipartBodyBuilder();
