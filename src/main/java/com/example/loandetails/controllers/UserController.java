@@ -27,9 +27,9 @@ public class UserController {
 
     private WebClient webClient;
 
-    public static final String itemString = "{ \"doctype\": \"Item\", \"enable_deferred_expense\": 0, \"country_of_origin\": \"United States\", \"is_sub_contracted_item\": 0, \"published_in_website\": 0, \"item_template\": \"\", \"create_variant\": 0, \"item_code\": \"%s\", \"item_name\": \"%s\", \"item_group\": \"Consumable\", \"valuation_rate\": null, \"standard_rate\": %s, \"description\": \"%s\", \"weight_per_unit\": 0, \"brand\": \"%s\", \"vin\": \"KMHLP4AG8NU344828\", \"year\": 2022, \"make\": \"HYUNDAI\", \"model\": \"ELANTRA\", \"style\": \"4dr Sdn Limited\", \"vehicle_description\": \"VIN: KMHLP4AG8NU344828 - 2022 HYUNDAI ELANTRA 4dr Sdn Limited\", \"disclosure_text\": \"Payments include license or documentary fees and sales tax. With Approved Credit. Not all applicants will qualify. Lease and loan quoting is a dynamic process so payments and terms are subject to change prior to contract execution by all parties. (constant value)\", \"state\": \"California\", \"country\": \"SANTA CLARA\", \"city\": \"SAN JOSE\", \"vehicle_group_id\": \"null\", \"cust_rebates\": 400, \"rebate_code\": \"null\", \"residual\": 15592.35, \"residualpct\": 57, \"orprogram\": \"Hyundai MY22 ELANTRA Special Lease - CE0/EA/MA2/MA3/SC2/SO/WE1/WE2/WE3/WE6\" }";
+    public static final String itemString = "{ \"doctype\": \"Item\", \"enable_deferred_expense\": 0, \"country_of_origin\": \"United States\", \"is_sub_contracted_item\": 0, \"published_in_website\": 0, \"item_template\": \"\", \"create_variant\": 0, \"item_code\": \"%s\", \"item_name\": \"%s\", \"item_group\": \"Consumable\", \"valuation_rate\": null, \"standard_rate\": %s, \"description\": \"%s\", \"weight_per_unit\": 0, \"brand\": \"%s\", \"vin\": \"%s\", \"year\": 2022, \"make\": \"%s\", \"model\": \"%s\", \"style\": \"4dr Sdn Limited\", \"vehicle_description\": \"%s\", \"disclosure_text\": \"%s\", \"state\": \"%s\", \"country\": \"SANTA CLARA\", \"city\": \"%s\", \"vehicle_group_id\": \"null\", \"cust_rebates\": 400, \"rebate_code\": \"null\", \"residual\": %s, \"residualpct\": 57, \"orprogram\": \"%s\" }";
 
-    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Personal Loan\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"LMS Visheshatech\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"\", \"gender\": \"Male\", \"source\": \"Chatbot\", \"email_id\": \"%s\", \"mobile_no\": \"%s\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"%s\", \"effective_date\": \"%s\", \"net_income\": , \"monthly_payment\": 20000, \"down_payment\": 10000, \"residual_value\": 90000 }";
+    public static final String leadString = "{ \"doctype\": \"Lead\", \"loan_type\": \"Financial Lease\", \"apply_for_credit_card\": \"No\", \"lead_owner\": \"Administrator\", \"status\": \"Lead\", \"type\": \"Client\", \"request_type\": \"Product Enquiry\", \"country\": \"United States\", \"enquiry_type\": \"Installment\", \"qualification_status\": \"Unqualified\", \"company\": \"Mastek\", \"language\": \"en\", \"disabled\": 0, \"unsubscribed\": 0, \"blog_subscriber\": 0, \"salutation\": \"\", \"first_name\": \"%s\", \"middle_name\": \"\", \"last_name\": \"\", \"age\": \"\", \"gender\": \"Male\", \"source\": \"Chatbot\", \"email_id\": \"%s\", \"mobile_no\": \"%s\", \"make\": \"%s\", \"model\": \"%s\", \"period\": \"%s\", \"effective_date\": \"%s\", \"net_income\": , \"monthly_payment\": %s, \"down_payment\": %s, \"residual_value\": %s , \"item\":%s}";
 
     public UserController(WebClient webClient) {
         this.webClient = webClient;
@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping("/lead")
     public Account createAccount(@RequestBody Account account) {
 
-        String itemCode,itemName, name, description,brand,make,model,car, period, email, effective_date, mobile;
+        String itemCode,itemName, name, description,brand,make,model,car, vin, state, city, period, email, effective_date, mobile, residual, vehicleDescription, disclosureText, downPayment, orProgram;
         int  term;
         double standardRate;
 
@@ -50,9 +50,20 @@ public class UserController {
         standardRate = Math.round( Double.parseDouble(account.getOfferDetails().getPayments().get(0).getMonthlyPayment()) );
         term = Integer.parseInt(account.getOfferDetails().getPayments().get(0).getTerm());//for calculation of standard rate
         description = account.getOfferDetails().getVehicleDescription();
+        make = account.getOfferDetails().getMake();
+        model = account.getOfferDetails().getModel();
         brand = "Cello";
+        vin = account.getOfferDetails().getVin();
+        orProgram = account.getOfferDetails().getPayments().get(0).getOrProgram();
+        city = account.getOfferDetails().getCity();
+        state = account.getOfferDetails().getState();
+        residual = account.getOfferDetails().getPayments().get(0).getResidual();
+        vehicleDescription = account.getOfferDetails().getVehicleDescription();
+        disclosureText = account.getOfferDetails().getDisclosureText();
 
-        String completeItemString = String.format(itemString, itemCode, itemName, standardRate, description, brand);
+
+
+        String completeItemString = String.format(itemString, itemCode, itemName, standardRate, description, brand, vin, make,model,vehicleDescription, disclosureText, state,city,residual,orProgram);
 
 
        // String.format(itemString,itemCode,itemName,standard_rate,"description", "brand");
@@ -61,13 +72,13 @@ public class UserController {
         //lead variables
         name = account.getCustomerDetails().getName();
         email = account.getCustomerDetails().getEmail();
-        make = account.getOfferDetails().getMake();
-        model = account.getOfferDetails().getModel();
+
         mobile = account.getCustomerDetails().getMobile();
         period = account.getOfferDetails().getPayments().get(0).getTerm();
         effective_date = account.getOfferDetails().getPayments().get(0).getEffectiveDate();
+        downPayment = account.getOfferDetails().getPayments().get(0).getDownPayment();
 
-        String completeLeadString = String.format(leadString, name, email, mobile, make, model, period, effective_date);
+        String completeLeadString = String.format(leadString, name, email, mobile, make, model, period, effective_date,account.getOfferDetails().getPayments().get(0).getMonthlyPayment(),downPayment,residual,itemCode );
 
         LOGGER.info(completeLeadString);
 
