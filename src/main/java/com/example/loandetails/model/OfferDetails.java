@@ -27,6 +27,8 @@ public class OfferDetails {
 
     private String city;
 
+    private String disclosureText;
+
     private List<Payments> payments;
 
     @Override

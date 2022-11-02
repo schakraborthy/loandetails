@@ -11,6 +11,12 @@ public class Payments {
 
     private String effectiveDate;
 
+    private String residual;
+
+    private String downPayment;
+
+    private String orProgram;
+
     @Override
     public String toString() {
         return "Payments{" +
